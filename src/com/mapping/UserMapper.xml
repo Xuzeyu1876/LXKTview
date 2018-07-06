@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.UserMapper">
+ 
+  <resultMap id="BaseResultMap" type="com.pojo.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="is_validate" jdbcType="INTEGER" property="isValidate" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="user_mail" jdbcType="VARCHAR" property="userMail" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="latest_login_time" jdbcType="TIMESTAMP" property="latestLoginTime" />
+    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
+    <result column="info_from" jdbcType="INTEGER" property="infoFrom" />
+ 
+<!--     <collection property="Comment" ofType="com.pojo.Comment">  
+      <result column="comment_id" property="commentId" />     
+         <association property="course" javaType="com.pojo.Course">
+        	<result column="cou_id" property="couId" />    
+            <result column="cou_name" property="couName" />  
+        </association>  
+    </collection>  -->
+   
+         
+   
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    user_id, is_validate, username, user_mail, create_time, latest_login_time, user_status, 
+    info_from
+  </sql>
+  <select id="selectByExample" parameterType="com.pojo.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+
+  <select id="findUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_mail = #{user_mail,jdbcType=VARCHAR}
+    and password = #{password,jdbcType=VARCHAR}
+  </select>
+  <select id="showalluser" parameterType="com.pojo.User" resultType="com.pojo.User">  
+       select       
+       user_id as userId,  
+       user_mail as userMail     
+       from lxkt_db.user
+   </select>  
+  <select id="showAlluser" resultType="com.pojo.combinePojo">  
+       select       
+       user_id as userId,  
+       username as username,
+       user_mail as userMail,
+       role_name as roleName,     
+       latest_login_time as latestLoginTime,
+       user_status as userStatus       
+       from user u
+       join user_has_role uhr
+       on u.user_id = uhr.user_user_id
+       join role r
+       on r.role_id=uhr.role_role_id 
+       	
+   </select>
+   
+	 <select id="showUser" parameterType="com.pojo.User" resultType="com.pojo.User">  
+       select       
+       user_id as userId,  
+       username as username,
+       user_mail as userMail,
+       create_time as createTime,
+       latest_login_time as latestLoginTime       
+       from user
+        where user_status = #{user_status,jdbcType=INTEGER}
+   </select>  
+   
+   <select id="selectUser" parameterType="com.pojo.User" resultType="com.pojo.User">  
+       select       
+       user_id as userId,  
+       username as username,
+       user_mail as userMail,
+       create_time as createTime,
+       latest_login_time as latestLoginTime       
+       from user 
+       where username = #{username,jdbcType=VARCHAR} 		
+   </select> 
+    
+   
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.UserExample">
+    delete from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userId" parameterType="com.pojo.User">
+    insert into user (user_id, password,is_validate, username, 
+      user_mail, create_time, latest_login_time, 
+      user_status, info_from)
+    values (#{userId,jdbcType=INTEGER},  #{password,jdbcType=VARCHAR}, #{isValidate,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{userMail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{latestLoginTime,jdbcType=TIMESTAMP}, 
+      #{userStatus,jdbcType=INTEGER}, #{infoFrom,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isValidate != null">
+        is_validate,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userMail != null">
+        user_mail,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="latestLoginTime != null">
+        latest_login_time,
+      </if>
+      <if test="userStatus != null">
+        user_status,
+      </if>
+      <if test="infoFrom != null">
+        info_from,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isValidate != null">
+        #{isValidate,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userMail != null">
+        #{userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="latestLoginTime != null">
+        #{latestLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null">
+        #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="infoFrom != null">
+        #{infoFrom,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.UserExample" resultType="java.lang.Long">
+    select count(*) from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user
+    <set>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isValidate != null">
+        is_validate = #{record.isValidate,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userMail != null">
+        user_mail = #{record.userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.latestLoginTime != null">
+        latest_login_time = #{record.latestLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userStatus != null">
+        user_status = #{record.userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.infoFrom != null">
+        info_from = #{record.infoFrom,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update user
+    set user_id = #{record.userId,jdbcType=INTEGER},
+      is_validate = #{record.isValidate,jdbcType=INTEGER},
+      username = #{record.username,jdbcType=VARCHAR},
+      user_mail = #{record.userMail,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      latest_login_time = #{record.latestLoginTime,jdbcType=TIMESTAMP},
+      user_status = #{record.userStatus,jdbcType=INTEGER},
+      info_from = #{record.infoFrom,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.User">
+    update user
+    <set>
+      <if test="isValidate != null">
+        is_validate = #{isValidate,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userMail != null">
+        user_mail = #{userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="latestLoginTime != null">
+        latest_login_time = #{latestLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null">
+        user_status = #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="infoFrom != null">
+        info_from = #{infoFrom,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.User">
+    update user
+    set is_validate = #{isValidate,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      user_mail = #{userMail,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      latest_login_time = #{latestLoginTime,jdbcType=TIMESTAMP},
+      user_status = #{userStatus,jdbcType=INTEGER},
+      info_from = #{infoFrom,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

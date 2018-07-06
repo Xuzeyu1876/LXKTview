@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CourseSourceMapper">
+  <resultMap id="BaseResultMap" type="com.pojo.CourseSource">
+    <id column="source_id" jdbcType="INTEGER" property="sourceId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="sou_name" jdbcType="VARCHAR" property="souName" />
+    <result column="sou_type" jdbcType="INTEGER" property="souType" />
+    <result column="sou_Dload_num" jdbcType="INTEGER" property="souDloadNum" />
+    <result column="sou_Uload_time" jdbcType="TIMESTAMP" property="souUloadTime" />
+    <result column="sou_url" jdbcType="VARCHAR" property="souUrl" />
+    <result column="sou_status" jdbcType="INTEGER" property="souStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    source_id, course_id, sou_name, sou_type, sou_Dload_num, sou_Uload_time, sou_url, 
+    sou_status
+  </sql>
+  <select id="selectByExample" parameterType="com.pojo.CourseSourceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="showCourseSource" parameterType="com.pojo.CourseSource" resultType="com.pojo.CourseSource">
+  	select
+  	source_id as sourceId,
+  	sou_name as souName
+  	from lxkt_db.course_source
+  	where course_id=#{courseId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course_source
+    where source_id = #{sourceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_source
+    where source_id = #{sourceId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.CourseSourceExample">
+    delete from course_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.CourseSource">
+    insert into course_source (source_id, course_id, sou_name, 
+      sou_type, sou_Dload_num, sou_Uload_time, 
+      sou_url, sou_status)
+    values (#{sourceId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{souName,jdbcType=VARCHAR}, 
+      #{souType,jdbcType=INTEGER}, #{souDloadNum,jdbcType=INTEGER}, #{souUloadTime,jdbcType=TIMESTAMP}, 
+      #{souUrl,jdbcType=VARCHAR}, #{souStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.CourseSource">
+    insert into course_source
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sourceId != null">
+        source_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="souName != null">
+        sou_name,
+      </if>
+      <if test="souType != null">
+        sou_type,
+      </if>
+      <if test="souDloadNum != null">
+        sou_Dload_num,
+      </if>
+      <if test="souUloadTime != null">
+        sou_Uload_time,
+      </if>
+      <if test="souUrl != null">
+        sou_url,
+      </if>
+      <if test="souStatus != null">
+        sou_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sourceId != null">
+        #{sourceId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="souName != null">
+        #{souName,jdbcType=VARCHAR},
+      </if>
+      <if test="souType != null">
+        #{souType,jdbcType=INTEGER},
+      </if>
+      <if test="souDloadNum != null">
+        #{souDloadNum,jdbcType=INTEGER},
+      </if>
+      <if test="souUloadTime != null">
+        #{souUloadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="souUrl != null">
+        #{souUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="souStatus != null">
+        #{souStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.CourseSourceExample" resultType="java.lang.Long">
+    select count(*) from course_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update course_source
+    <set>
+      <if test="record.sourceId != null">
+        source_id = #{record.sourceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.courseId != null">
+        course_id = #{record.courseId,jdbcType=INTEGER},
+      </if>
+      <if test="record.souName != null">
+        sou_name = #{record.souName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.souType != null">
+        sou_type = #{record.souType,jdbcType=INTEGER},
+      </if>
+      <if test="record.souDloadNum != null">
+        sou_Dload_num = #{record.souDloadNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.souUloadTime != null">
+        sou_Uload_time = #{record.souUloadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.souUrl != null">
+        sou_url = #{record.souUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.souStatus != null">
+        sou_status = #{record.souStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update course_source
+    set source_id = #{record.sourceId,jdbcType=INTEGER},
+      course_id = #{record.courseId,jdbcType=INTEGER},
+      sou_name = #{record.souName,jdbcType=VARCHAR},
+      sou_type = #{record.souType,jdbcType=INTEGER},
+      sou_Dload_num = #{record.souDloadNum,jdbcType=INTEGER},
+      sou_Uload_time = #{record.souUloadTime,jdbcType=TIMESTAMP},
+      sou_url = #{record.souUrl,jdbcType=VARCHAR},
+      sou_status = #{record.souStatus,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.CourseSource">
+    update course_source
+    <set>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="souName != null">
+        sou_name = #{souName,jdbcType=VARCHAR},
+      </if>
+      <if test="souType != null">
+        sou_type = #{souType,jdbcType=INTEGER},
+      </if>
+      <if test="souDloadNum != null">
+        sou_Dload_num = #{souDloadNum,jdbcType=INTEGER},
+      </if>
+      <if test="souUloadTime != null">
+        sou_Uload_time = #{souUloadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="souUrl != null">
+        sou_url = #{souUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="souStatus != null">
+        sou_status = #{souStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where source_id = #{sourceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.CourseSource">
+    update course_source
+    set course_id = #{courseId,jdbcType=INTEGER},
+      sou_name = #{souName,jdbcType=VARCHAR},
+      sou_type = #{souType,jdbcType=INTEGER},
+      sou_Dload_num = #{souDloadNum,jdbcType=INTEGER},
+      sou_Uload_time = #{souUloadTime,jdbcType=TIMESTAMP},
+      sou_url = #{souUrl,jdbcType=VARCHAR},
+      sou_status = #{souStatus,jdbcType=INTEGER}
+    where source_id = #{sourceId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CommentReplyMapper">
+  <resultMap id="BaseResultMap" type="com.pojo.CommentReply">
+    <id column="comment_reply_id" jdbcType="INTEGER" property="commentReplyId" />
+    <result column="reply_type" jdbcType="INTEGER" property="replyType" />
+    <result column="reply_time" jdbcType="TIMESTAMP" property="replyTime" />
+    <result column="to_user_id" jdbcType="INTEGER" property="toUserId" />
+    <result column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="from_user_id" jdbcType="INTEGER" property="fromUserId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pojo.CommentReply">
+    <result column="reply_content" jdbcType="LONGVARCHAR" property="replyContent" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    comment_reply_id, reply_type, reply_time, to_user_id, comment_id, from_user_id
+  </sql>
+  <sql id="Blob_Column_List">
+    reply_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pojo.CommentReplyExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pojo.CommentReplyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from comment_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="showCommentReply" parameterType="com.pojo.CommentReply" resultType="com.pojo.CommentReply">  
+       select       
+       comment_id as commentId,  
+       reply_content as replyContent,
+       from_user_id as fromUserId,
+       to_user_id as toUserId,
+       reply_type as replyType,
+       comment_reply_id as commentReplyId,
+       reply_time as replyTime
+       from lxkt_db.comment_reply
+       where comment_id = #{commentId,jdbcType=INTEGER}
+   </select>  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment_reply
+    where comment_reply_id = #{commentReplyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from comment_reply
+    where comment_reply_id = #{commentReplyId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.CommentReplyExample">
+    delete from comment_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.CommentReply">
+    insert into comment_reply (comment_reply_id, reply_type, reply_time, 
+      to_user_id, comment_id, from_user_id, 
+      reply_content)
+    values (#{commentReplyId,jdbcType=INTEGER}, #{replyType,jdbcType=INTEGER}, #{replyTime,jdbcType=TIMESTAMP}, 
+      #{toUserId,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, #{fromUserId,jdbcType=INTEGER}, 
+      #{replyContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.CommentReply">
+    insert into comment_reply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentReplyId != null">
+        comment_reply_id,
+      </if>
+      <if test="replyType != null">
+        reply_type,
+      </if>
+      <if test="replyTime != null">
+        reply_time,
+      </if>
+      <if test="toUserId != null">
+        to_user_id,
+      </if>
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="fromrUserId != null">
+        fromr_user_id,
+      </if>
+      <if test="replyContent != null">
+        reply_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentReplyId != null">
+        #{commentReplyId,jdbcType=INTEGER},
+      </if>
+      <if test="replyType != null">
+        #{replyType,jdbcType=INTEGER},
+      </if>
+      <if test="replyTime != null">
+        #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="toUserId != null">
+        #{toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="commentId != null">
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="fromrUserId != null">
+        #{fromrUserId,jdbcType=INTEGER},
+      </if>
+      <if test="replyContent != null">
+        #{replyContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.CommentReplyExample" resultType="java.lang.Long">
+    select count(*) from comment_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update comment_reply
+    <set>
+      <if test="record.commentReplyId != null">
+        comment_reply_id = #{record.commentReplyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyType != null">
+        reply_type = #{record.replyType,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyTime != null">
+        reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.toUserId != null">
+        to_user_id = #{record.toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.commentId != null">
+        comment_id = #{record.commentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromrUserId != null">
+        fromr_user_id = #{record.fromrUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyContent != null">
+        reply_content = #{record.replyContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update comment_reply
+    set comment_reply_id = #{record.commentReplyId,jdbcType=INTEGER},
+      reply_type = #{record.replyType,jdbcType=INTEGER},
+      reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
+      to_user_id = #{record.toUserId,jdbcType=INTEGER},
+      comment_id = #{record.commentId,jdbcType=INTEGER},
+      fromr_user_id = #{record.fromrUserId,jdbcType=INTEGER},
+      reply_content = #{record.replyContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update comment_reply
+    set comment_reply_id = #{record.commentReplyId,jdbcType=INTEGER},
+      reply_type = #{record.replyType,jdbcType=INTEGER},
+      reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
+      to_user_id = #{record.toUserId,jdbcType=INTEGER},
+      comment_id = #{record.commentId,jdbcType=INTEGER},
+      fromr_user_id = #{record.fromrUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.CommentReply">
+    update comment_reply
+    <set>
+      <if test="replyType != null">
+        reply_type = #{replyType,jdbcType=INTEGER},
+      </if>
+      <if test="replyTime != null">
+        reply_time = #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="toUserId != null">
+        to_user_id = #{toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="commentId != null">
+        comment_id = #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="fromrUserId != null">
+        fromr_user_id = #{fromrUserId,jdbcType=INTEGER},
+      </if>
+      <if test="replyContent != null">
+        reply_content = #{replyContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where comment_reply_id = #{commentReplyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pojo.CommentReply">
+    update comment_reply
+    set reply_type = #{replyType,jdbcType=INTEGER},
+      reply_time = #{replyTime,jdbcType=TIMESTAMP},
+      to_user_id = #{toUserId,jdbcType=INTEGER},
+      comment_id = #{commentId,jdbcType=INTEGER},
+      fromr_user_id = #{fromrUserId,jdbcType=INTEGER},
+      reply_content = #{replyContent,jdbcType=LONGVARCHAR}
+    where comment_reply_id = #{commentReplyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.CommentReply">
+    update comment_reply
+    set reply_type = #{replyType,jdbcType=INTEGER},
+      reply_time = #{replyTime,jdbcType=TIMESTAMP},
+      to_user_id = #{toUserId,jdbcType=INTEGER},
+      comment_id = #{commentId,jdbcType=INTEGER},
+      fromr_user_id = #{fromrUserId,jdbcType=INTEGER}
+    where comment_reply_id = #{commentReplyId,jdbcType=INTEGER}
+  </update>
+</mapper>

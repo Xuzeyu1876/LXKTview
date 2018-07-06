@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.RoleHasPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.pojo.RoleHasPermissionKey">
+    <id column="role_role_id" jdbcType="INTEGER" property="roleRoleId" />
+    <id column="permission_per_id" jdbcType="INTEGER" property="permissionPerId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    role_role_id, permission_per_id
+  </sql>
+  <select id="selectByExample" parameterType="com.pojo.RoleHasPermissionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from role_has_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.pojo.RoleHasPermissionKey">
+    delete from role_has_permission
+    where role_role_id = #{roleRoleId,jdbcType=INTEGER}
+      and permission_per_id = #{permissionPerId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.RoleHasPermissionExample">
+    delete from role_has_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert1" parameterType="java.lang.Integer">
+   insert into role_has_permission (role_role_id, permission_per_id)
+    values (#{role_role_id,jdbcType=INTEGER}, #{permission_per_id,jdbcType=INTEGER})
+    </insert>
+  
+  
+  
+  <insert id="insert" parameterType="com.pojo.RoleHasPermissionKey">
+    insert into role_has_permission (role_role_id, permission_per_id)
+    values (#{roleRoleId,jdbcType=INTEGER}, #{permissionPerId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.RoleHasPermissionKey">
+    insert into role_has_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleRoleId != null">
+        role_role_id,
+      </if>
+      <if test="permissionPerId != null">
+        permission_per_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleRoleId != null">
+        #{roleRoleId,jdbcType=INTEGER},
+      </if>
+      <if test="permissionPerId != null">
+        #{permissionPerId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getAll" parameterType="com.pojo.RoleHasPermissionKey" resultType="com.pojo.RoleHasPermissionKey">  
+       select       
+       role_role_id as roleRoleId,
+       permission_per_id as permissionPerId            
+       from 
+       	role_has_permission
+       	
+   </select>
+  <select id="countByExample" parameterType="com.pojo.RoleHasPermissionExample" resultType="java.lang.Long">
+    select count(*) from role_has_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update role_has_permission
+    <set>
+      <if test="record.roleRoleId != null">
+        role_role_id = #{record.roleRoleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.permissionPerId != null">
+        permission_per_id = #{record.permissionPerId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update role_has_permission
+    set role_role_id = #{record.roleRoleId,jdbcType=INTEGER},
+      permission_per_id = #{record.permissionPerId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.pojo.Permission">
+    <id column="per_id" jdbcType="INTEGER" property="perId" />
+    <result column="per_name" jdbcType="VARCHAR" property="perName" />
+    <result column="per_url" jdbcType="VARCHAR" property="perUrl" />
+    <result column="per_status" jdbcType="INTEGER" property="perStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    per_id, per_name
+  </sql>
+  <select id="selectByExample" parameterType="com.pojo.PermissionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="showPermission" parameterType="com.pojo.Permission" resultType="com.pojo.Permission">  
+       select       
+       per_id as perId,
+       per_name as perName,
+       per_url as perUrl,
+       per_status as  perStatus             
+       from permission
+       	
+   </select>
+ <select id="getPerByRoleId" resultType="com.pojo.Permission">
+ 	     select       
+       per_id as perId,
+       per_name as perName,
+       per_url as perUrl,
+       per_status as  perStatus
+       from permission p      
+       join role_has_permission rp
+  		on rp.permission_per_id=p.per_id
+  		join role r 
+  		on rp.role_role_id=r.role_id 
+  		 <where>
+       		<if test="role_id!=null and role_id!=''">
+       			role_id=#{role_id,jdbcType=INTEGER}
+       			</if>       		
+       	</where>
+ 	</select>  
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from permission
+    where per_id = #{perId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from permission
+    where per_id = #{perId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.PermissionExample">
+    delete from permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.Permission">
+    insert into permission (per_id, per_name,per_url,per_status)
+    values (#{perId,jdbcType=INTEGER}, #{perName,jdbcType=VARCHAR}, #{perUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.Permission">
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="perId != null">
+        per_id,
+      </if>
+      <if test="perName != null">
+        per_name,
+      </if>
+      <if test="perUrl != null">
+        per_url,
+      </if>
+        <if test="perStatus != null">
+        per_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="perId != null">
+        #{perId,jdbcType=INTEGER},
+      </if>
+      <if test="perName != null">
+        #{perName,jdbcType=VARCHAR},
+      </if>
+      <if test="perUrl != null">
+        #{perUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="perStatus != null">
+        #{perStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.PermissionExample" resultType="java.lang.Long">
+    select count(*) from permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update permission
+    <set>
+      <if test="record.perId != null">
+        per_id = #{record.perId,jdbcType=INTEGER},
+      </if>
+      <if test="record.perName != null">
+        per_name = #{record.perName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update permission
+    set per_id = #{record.perId,jdbcType=INTEGER},
+      per_name = #{record.perName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.Permission">
+    update permission
+    <set>
+      <if test="perName != null">
+        per_name = #{perName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where per_id = #{perId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.Permission">
+    update permission
+    set per_name = #{perName,jdbcType=VARCHAR},
+    	per_url = #{perUrl,jdbcType=VARCHAR},
+    	per_status =#{perStatus,jdbcType=INTEGER}
+    where per_id = #{perId,jdbcType=INTEGER}
+  </update>
+</mapper>

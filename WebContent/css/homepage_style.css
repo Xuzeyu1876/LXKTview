@@ -1,0 +1,92 @@
+.course_default{
+	width:150px;
+	height:100px;
+	boxing-sizing:boder-box;
+	background-color:yellow;
+}
+.font_1{
+	font-size:10px;
+}
+.font_heading_1{
+	font-size:30px;
+	font-weight:400;
+}
+#x01{
+	position:absolute;
+	top:150px;
+	left:20px;
+	height:360px;
+	width:120px;
+	text-align:center;
+}
+#x02{
+	position:absolute;
+	top:150px;
+	left:160px;
+	height:300px;
+	width:500px;
+}
+#x03{
+	position:absolute;
+	left:15px;
+	top:520px;
+	width:120px;
+	height:40px;
+}
+.box0{
+	position:absolute;
+	top:560px;
+	left:50px;
+}
+.box1{
+	position:absolute;
+	top:560px;
+	left:250px;
+}
+.box2{
+	position:absolute;
+	top:560px;
+	left:450px;
+}
+.box3{
+	position:absolute;
+	top:560px;
+	left:650px;
+}
+.box4{
+	position:absolute;
+	top:560px;
+	left:850px;
+}
+.box5{
+	position:absolute;
+	top:710px;
+	left:50px;
+}
+.box6{
+	position:absolute;
+	top:710px;
+	left:250px;
+}
+.box7{
+	position:absolute;
+	top:710px;
+	left:450px;
+}
+.box8{
+	position:absolute;
+	top:710px;
+	left:650px;
+}
+.box9{
+	position:absolute;
+	top:710px;
+	left:850px;
+}
+#x15{
+	position:absolute;
+	top:820px;
+	left:50px;
+	width:950px;
+	text-align:center;
+}

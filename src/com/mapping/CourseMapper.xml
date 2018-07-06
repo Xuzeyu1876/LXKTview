@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.pojo.Course">
+    <id column="cou_id" jdbcType="INTEGER" property="couId" />
+    <result column="cou_name" jdbcType="VARCHAR" property="couName" />
+    <result column="cou_image" jdbcType="VARCHAR" property="couImage" />
+    <result column="cou_sales" jdbcType="INTEGER" property="couSales" />
+    <result column="cou_grade" jdbcType="REAL" property="couGrade" />
+    <result column="cou_status" jdbcType="INTEGER" property="couStatus" />
+    <result column="cou_linetime" jdbcType="TIMESTAMP" property="couLinetime" />
+    <result column="cou_updatetime" jdbcType="TIMESTAMP" property="couUpdatetime" />
+    <result column="cou_platform_visit" jdbcType="INTEGER" property="couPlatformVisit" />
+    <result column="cou_our_visit" jdbcType="INTEGER" property="couOurVisit" />
+
+<!--   	<collection property="Comment" ofType="com.pojo.Comment">  
+      <result column="comment_id" property="commentId" />            
+    </collection>    -->
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pojo.Course">
+    <result column="cou_summary" jdbcType="LONGVARCHAR" property="couSummary" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cou_id, cou_name, cou_image, cou_sales, cou_grade, cou_status, cou_linetime, cou_updatetime, 
+    cou_platform_visit, cou_our_visit
+  </sql>
+  <sql id="Blob_Column_List">
+    cou_summary
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pojo.CourseExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pojo.CourseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+    <select id="showCourse" parameterType="com.pojo.Course" resultType="com.pojo.Course">  
+       select       
+       cou_id as couId,  
+       cou_name as couName,
+       cou_sales as couSales,
+       cou_grade as couGrade,
+       cou_linetime as couLinetime,
+       cou_updatetime as  couUpdatetime
+            
+       from course
+		
+   </select>  
+
+  <select id="showCourseBySummary" parameterType="com.pojo.Course" resultType="com.pojo.Course">  
+       select       
+       cou_id as couId,  
+       cou_name as couName
+       from lxkt_db.course
+       where cou_summary=#{couSummary,jdbcType=VARCHAR}
+   </select>  
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course
+    where cou_id = #{couId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where cou_id = #{couId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.CourseExample">
+    delete from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.Course">
+    insert into course (cou_id, cou_name, cou_image, 
+      cou_sales, cou_grade, cou_status, 
+      cou_linetime, cou_updatetime, cou_platform_visit, 
+      cou_our_visit, cou_summary)
+    values (#{couId,jdbcType=INTEGER}, #{couName,jdbcType=VARCHAR}, #{couImage,jdbcType=VARCHAR}, 
+      #{couSales,jdbcType=INTEGER}, #{couGrade,jdbcType=REAL}, #{couStatus,jdbcType=INTEGER}, 
+      #{couLinetime,jdbcType=TIMESTAMP}, #{couUpdatetime,jdbcType=TIMESTAMP}, #{couPlatformVisit,jdbcType=INTEGER}, 
+      #{couOurVisit,jdbcType=INTEGER}, #{couSummary,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="couId != null">
+        cou_id,
+      </if>
+      <if test="couName != null">
+        cou_name,
+      </if>
+      <if test="couImage != null">
+        cou_image,
+      </if>
+      <if test="couSales != null">
+        cou_sales,
+      </if>
+      <if test="couGrade != null">
+        cou_grade,
+      </if>
+      <if test="couStatus != null">
+        cou_status,
+      </if>
+      <if test="couLinetime != null">
+        cou_linetime,
+      </if>
+      <if test="couUpdatetime != null">
+        cou_updatetime,
+      </if>
+      <if test="couPlatformVisit != null">
+        cou_platform_visit,
+      </if>
+      <if test="couOurVisit != null">
+        cou_our_visit,
+      </if>
+      <if test="couSummary != null">
+        cou_summary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="couId != null">
+        #{couId,jdbcType=INTEGER},
+      </if>
+      <if test="couName != null">
+        #{couName,jdbcType=VARCHAR},
+      </if>
+      <if test="couImage != null">
+        #{couImage,jdbcType=VARCHAR},
+      </if>
+      <if test="couSales != null">
+        #{couSales,jdbcType=INTEGER},
+      </if>
+      <if test="couGrade != null">
+        #{couGrade,jdbcType=REAL},
+      </if>
+      <if test="couStatus != null">
+        #{couStatus,jdbcType=INTEGER},
+      </if>
+      <if test="couLinetime != null">
+        #{couLinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couUpdatetime != null">
+        #{couUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couPlatformVisit != null">
+        #{couPlatformVisit,jdbcType=INTEGER},
+      </if>
+      <if test="couOurVisit != null">
+        #{couOurVisit,jdbcType=INTEGER},
+      </if>
+      <if test="couSummary != null">
+        #{couSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.CourseExample" resultType="java.lang.Long">
+    select count(*) from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update course
+    <set>
+      <if test="record.couId != null">
+        cou_id = #{record.couId,jdbcType=INTEGER},
+      </if>
+      <if test="record.couName != null">
+        cou_name = #{record.couName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couImage != null">
+        cou_image = #{record.couImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couSales != null">
+        cou_sales = #{record.couSales,jdbcType=INTEGER},
+      </if>
+      <if test="record.couGrade != null">
+        cou_grade = #{record.couGrade,jdbcType=REAL},
+      </if>
+      <if test="record.couStatus != null">
+        cou_status = #{record.couStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.couLinetime != null">
+        cou_linetime = #{record.couLinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.couUpdatetime != null">
+        cou_updatetime = #{record.couUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.couPlatformVisit != null">
+        cou_platform_visit = #{record.couPlatformVisit,jdbcType=INTEGER},
+      </if>
+      <if test="record.couOurVisit != null">
+        cou_our_visit = #{record.couOurVisit,jdbcType=INTEGER},
+      </if>
+      <if test="record.couSummary != null">
+        cou_summary = #{record.couSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update course
+    set cou_id = #{record.couId,jdbcType=INTEGER},
+      cou_name = #{record.couName,jdbcType=VARCHAR},
+      cou_image = #{record.couImage,jdbcType=VARCHAR},
+      cou_sales = #{record.couSales,jdbcType=INTEGER},
+      cou_grade = #{record.couGrade,jdbcType=REAL},
+      cou_status = #{record.couStatus,jdbcType=INTEGER},
+      cou_linetime = #{record.couLinetime,jdbcType=TIMESTAMP},
+      cou_updatetime = #{record.couUpdatetime,jdbcType=TIMESTAMP},
+      cou_platform_visit = #{record.couPlatformVisit,jdbcType=INTEGER},
+      cou_our_visit = #{record.couOurVisit,jdbcType=INTEGER},
+      cou_summary = #{record.couSummary,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update course
+    set cou_id = #{record.couId,jdbcType=INTEGER},
+      cou_name = #{record.couName,jdbcType=VARCHAR},
+      cou_image = #{record.couImage,jdbcType=VARCHAR},
+      cou_sales = #{record.couSales,jdbcType=INTEGER},
+      cou_grade = #{record.couGrade,jdbcType=REAL},
+      cou_status = #{record.couStatus,jdbcType=INTEGER},
+      cou_linetime = #{record.couLinetime,jdbcType=TIMESTAMP},
+      cou_updatetime = #{record.couUpdatetime,jdbcType=TIMESTAMP},
+      cou_platform_visit = #{record.couPlatformVisit,jdbcType=INTEGER},
+      cou_our_visit = #{record.couOurVisit,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.Course">
+    update course
+    <set>
+      <if test="couName != null">
+        cou_name = #{couName,jdbcType=VARCHAR},
+      </if>
+      <if test="couImage != null">
+        cou_image = #{couImage,jdbcType=VARCHAR},
+      </if>
+      <if test="couSales != null">
+        cou_sales = #{couSales,jdbcType=INTEGER},
+      </if>
+      <if test="couGrade != null">
+        cou_grade = #{couGrade,jdbcType=REAL},
+      </if>
+      <if test="couStatus != null">
+        cou_status = #{couStatus,jdbcType=INTEGER},
+      </if>
+      <if test="couLinetime != null">
+        cou_linetime = #{couLinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couUpdatetime != null">
+        cou_updatetime = #{couUpdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="couPlatformVisit != null">
+        cou_platform_visit = #{couPlatformVisit,jdbcType=INTEGER},
+      </if>
+      <if test="couOurVisit != null">
+        cou_our_visit = #{couOurVisit,jdbcType=INTEGER},
+      </if>
+      <if test="couSummary != null">
+        cou_summary = #{couSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where cou_id = #{couId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pojo.Course">
+    update course
+    set cou_name = #{couName,jdbcType=VARCHAR},
+      cou_image = #{couImage,jdbcType=VARCHAR},
+      cou_sales = #{couSales,jdbcType=INTEGER},
+      cou_grade = #{couGrade,jdbcType=REAL},
+      cou_status = #{couStatus,jdbcType=INTEGER},
+      cou_linetime = #{couLinetime,jdbcType=TIMESTAMP},
+      cou_updatetime = #{couUpdatetime,jdbcType=TIMESTAMP},
+      cou_platform_visit = #{couPlatformVisit,jdbcType=INTEGER},
+      cou_our_visit = #{couOurVisit,jdbcType=INTEGER},
+      cou_summary = #{couSummary,jdbcType=LONGVARCHAR}
+    where cou_id = #{couId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.Course">
+    update course
+    set cou_name = #{couName,jdbcType=VARCHAR},
+      cou_image = #{couImage,jdbcType=VARCHAR},
+      cou_sales = #{couSales,jdbcType=INTEGER},
+      cou_grade = #{couGrade,jdbcType=REAL},
+      cou_status = #{couStatus,jdbcType=INTEGER},
+      cou_linetime = #{couLinetime,jdbcType=TIMESTAMP},
+      cou_updatetime = #{couUpdatetime,jdbcType=TIMESTAMP},
+      cou_platform_visit = #{couPlatformVisit,jdbcType=INTEGER},
+      cou_our_visit = #{couOurVisit,jdbcType=INTEGER}
+    where cou_id = #{couId,jdbcType=INTEGER}
+  </update>
+</mapper>
